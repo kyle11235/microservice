@@ -1,0 +1,40 @@
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: kyle
+  labels:
+    name: kyle
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: kyle-service-account
+  namespace: kyle
+---
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  namespace: kyle
+  name: kyle-deploy-role
+rules:
+- apiGroups: [“extensions”, “apps”]
+  resources: [“deployments”]
+  verbs: [“get”, “create”, “update”, “patch”]
+- apiGroups: [“”]
+  resources: [“services”]
+  verbs: [“get”, “create”, “update”, “patch”]
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: kyle-binding
+  namespace: kyle
+subjects:
+- kind: ServiceAccount
+  name: kyle-service-account
+  namespace: kyle
+roleRef:
+  kind: Role
+  name: kyle-deploy-role
+  apiGroup: rbac.authorization.k8s.io
+

@@ -1,0 +1,67 @@
+---
+  kind: Deployment
+  apiVersion: extensions/v1beta1
+  metadata: 
+    name: echo
+    namespace: default
+    labels: 
+      app: echo
+    annotations: 
+      deployment.kubernetes.io/revision: 1
+  spec: 
+    replicas: 1
+    selector: 
+      matchLabels: 
+        app: echo
+    template: 
+      metadata: 
+        name: echo
+        labels: 
+          app: echo
+      spec: 
+        containers: 
+          - 
+            name: echo
+            image: katacoda/docker-http-server
+            imagePullPolicy: Always
+        restartPolicy: Always
+    strategy: 
+      type: RollingUpdate
+      rollingUpdate: 
+        maxUnavailable: 1
+        maxSurge: 1
+---
+  kind: Service
+  apiVersion: v1
+  metadata: 
+    name: echo
+    namespace: default
+    labels: 
+      app: echo
+  spec: 
+    ports: 
+      - 
+        name: web
+        protocol: TCP
+        port: 80
+        targetPort: 80
+    selector: 
+      app: echo
+    type: ClusterIP
+    sessionAffinity: None
+---
+  apiVersion: extensions/v1beta1
+  kind: Ingress
+  metadata:
+    name: echo
+    namespace: default
+    annotations:
+      kubernetes.io/ingress.class: traefik
+  spec:
+    rules:
+    - host: echo.com
+      http:
+        paths:
+        - backend:
+            serviceName: echo
+            servicePort: 80
