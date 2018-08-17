@@ -11,7 +11,8 @@ printf "\nremove image...\n\n"
 sudo docker rmi $DOCKER_USERNAME/$APP_NAME:latest
 
 printf "\nclean tmp...\n\n"
-sudo rm -rf ./tmp/*
+sudo rm -rf ./tmp/
+sudo mkdir ./tmp
 
 printf "\ncopy app...\n\n"
 for file in $WORKSPACE/*; do
