@@ -1,50 +1,47 @@
-# deploy web app folder
-# e.g. target/employee then your app name is employee
 
-DOCKER_USERNAME=kyle11235
-DOCKER_PASSWORD=xxx
-APP_NAME=employee
-WORKSPACE=$(readlink -f ../../)
+
+DOCKER=$1
+REGISTRY_HOST=$2
+REGISTRY_USER=$3
+REGISTRY_PASS=$4
+APP_NAME=$5
+IMAGE=$6
+
+SHELL_DIR=$(dirname "$BASH_SOURCE")
+APP_DIR=$(cd $SHELL_DIR/../..; pwd)
 
 printf "\nremove image...\n\n"
-sudo docker rmi $DOCKER_USERNAME/$APP_NAME:latest
+$DOCKER rmi $IMAGE
 
 printf "\nclean tmp...\n\n"
-sudo rm -rf ./tmp
-sudo mkdir ./tmp
+rm -rf $SHELL_DIR/tmp
+mkdir $SHELL_DIR/tmp
 
 printf "\ncopy app...\n\n"
-sudo cp -r $WORKSPACE/target/$APP_NAME ./tmp/
+cp -r $APP_DIR/app.war $SHELL_DIR/tmp/
 
 printf "\nmount app...\n\n"
-sudo docker run --name $APP_NAME -v $(pwd)/tmp:/usr/local/tomcat/webapps tomcat:alpine /bin/sh -c "cp -r webapps/$APP_NAME /tmp/$APP_NAME"
+$DOCKER run --name $APP_NAME -v $SHELL_DIR/tmp:/usr/local/tomcat/webapps tomcat:alpine /bin/sh -c "cp -r webapps/app.war /tmp/app.war"
 
 printf "\ncommit to image...\n\n"
-sudo docker commit $APP_NAME $DOCKER_USERNAME/$APP_NAME:latest 
+$DOCKER commit $APP_NAME $IMAGE
 
 printf "\nremove container...\n\n"
-sudo docker rm $APP_NAME
+$DOCKER rm $APP_NAME
 
 printf "\nrun container...\n\n"
-sudo docker run --name $APP_NAME -d --rm $DOCKER_USERNAME/$APP_NAME:latest /bin/sh -c "mv /tmp/$APP_NAME webapps/$APP_NAME;catalina.sh run"
+$DOCKER run --name $APP_NAME -d --rm $IMAGE /bin/sh -c "mv /tmp/app.war webapps/app.war;catalina.sh run"
 
 printf "\ncommit to image again...\n\n"
-sudo docker commit $APP_NAME $DOCKER_USERNAME/$APP_NAME:latest 
+$DOCKER commit $IMAGE
 
 printf "\nstop container...\n\n"
-sudo docker stop $APP_NAME
+$DOCKER stop $APP_NAME
 
 printf "\nlogin docker...\n\n"
-sudo docker login --username=$DOCKER_USERNAME --password=$DOCKER_PASSWORD
+$DOCKER login --username=$REGISTRY_USER --password=$REGISTRY_PASS $REGISTRY_HOST
 
 printf "\npush image...\n\n"
-sudo docker push $DOCKER_USERNAME/$APP_NAME:latest
-
-# verify example
-# sudo docker run --name c1 -it --rm -p 9001:8080 kyle11235/employee bash
-# sudo docker run --name c1 -d --rm -p 9001:8080 kyle11235/employee
-# http://ip:9001/employee
-# sudo docker stop c1
-
+$DOCKER push $IMAGE
 
 

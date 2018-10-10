@@ -1,35 +1,42 @@
-# static files is in public folder of project
-# your app name has to be lower case
 
-DOCKER_USERNAME=kyle11235
-DOCKER_PASSWORD=xxx
-APP_NAME=html
-WORKSPACE=$(readlink -f ../../)
+
+DOCKER=$1
+REGISTRY_HOST=$2
+REGISTRY_USER=$3
+REGISTRY_PASS=$4
+APP_NAME=$5
+IMAGE=$6
+
+SHELL_DIR=$(dirname "$BASH_SOURCE")
+APP_DIR=$(cd $SHELL_DIR/../..; pwd)
 
 printf "\nremove image...\n\n"
-sudo docker rmi $DOCKER_USERNAME/$APP_NAME:latest
+$DOCKER rmi $IMAGE
 
 printf "\nclean tmp...\n\n"
-sudo rm -rf ./tmp/
-sudo mkdir ./tmp
+rm -rf $SHELL_DIR/tmp
+mkdir $SHELL_DIR/tmp
 
 printf "\ncopy app...\n\n"
-sudo cp -r $WORKSPACE/public/* ./tmp/
+for file in $APP_DIR/*; do
+  if [ $file != "$APP_DIR/builder" ]
+    then
+      cp -r $file $SHELL_DIR/tmp/
+  fi
+done 
 
-printf "\nmount app...\n\n"
-docker build -t $DOCKER_USERNAME/$APP_NAME:latest .
+printf "\nbuild image...\n\n"
+$DOCKER build -t $IMAGE $SHELL_DIR
 
-printf "\nlogin docker...\n\n"
-sudo docker login --username=$DOCKER_USERNAME --password=$DOCKER_PASSWORD
+printf "\nlogin...\n\n"
+$DOCKER login --username=$REGISTRY_USER --password=$REGISTRY_PASS $REGISTRY_HOST
 
 printf "\npush image...\n\n"
-sudo docker push $DOCKER_USERNAME/$APP_NAME:latest
+$DOCKER push $IMAGE
 
-# verify example
-# sudo docker run --name c1 -it --rm -p 9001:80 kyle11235/html bash
-# sudo docker run --name c1 -d --rm -p 9001:80 kyle11235/html
-# http://ip:9001
-# sudo docker stop c1
+
+
+
 
 
 

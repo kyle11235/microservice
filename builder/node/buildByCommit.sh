@@ -1,56 +1,53 @@
-# app is the whole project
-# app name has to be lower case
 
-DOCKER_USERNAME=kyle11235
-DOCKER_PASSWORD=xxx
-APP_NAME=node
-MAIN_JS=8080.js
-WORKSPACE=$(readlink -f ../../)
+
+DOCKER=$1
+REGISTRY_HOST=$2
+REGISTRY_USER=$3
+REGISTRY_PASS=$4
+APP_NAME=$5
+IMAGE=$6
+
+SHELL_DIR=$(dirname "$BASH_SOURCE")
+APP_DIR=$(cd $SHELL_DIR/../..; pwd)
 
 printf "\nremove image...\n\n"
-sudo docker rmi $DOCKER_USERNAME/$APP_NAME:latest
+$DOCKER rmi $IMAGE
 
 printf "\nclean tmp...\n\n"
-sudo rm -rf ./tmp/
-sudo mkdir ./tmp
+rm -rf $SHELL_DIR/tmp
+mkdir $SHELL_DIR/tmp
 
 printf "\ncopy app...\n\n"
-for file in $WORKSPACE/*; do
-  if [ $file != "$WORKSPACE/docker" ]
+for file in $APP_DIR/*; do
+  if [ $file != "$APP_DIR/builder" ]
     then
-      sudo cp -r $file ./tmp/
+      cp -r $file $SHELL_DIR/tmp/
   fi
 done 
 
 printf "\nmount app...\n\n"
-sudo docker run --name $APP_NAME -v $(pwd)/tmp:/opt/$APP_NAME node:6 /bin/sh -c "cp -r /opt/$APP_NAME /tmp/"
+$DOCKER run --name $APP_NAME -v $SHELL_DIR/tmp:/opt/$APP_NAME node:6 /bin/sh -c "cp -r /opt/$APP_NAME /tmp/"
 
 printf "\ncommit to image...\n\n"
-sudo docker commit $APP_NAME $DOCKER_USERNAME/$APP_NAME:latest 
+$DOCKER commit $APP_NAME $IMAGE
 
 printf "\nremove container...\n\n"
-sudo docker rm $APP_NAME
+$DOCKER rm $APP_NAME
 
 printf "\nrun container...\n\n"
-sudo docker run --name $APP_NAME -d --rm $DOCKER_USERNAME/$APP_NAME:latest /bin/sh -c "mv /tmp/$APP_NAME /opt/;node /opt/$APP_NAME/$MAIN_JS"
+$DOCKER run --name $APP_NAME -d --rm $IMAGE /bin/sh -c "mv /tmp/$APP_NAME /opt/;node /opt/$APP_NAME/index.js"
 
 printf "\ncommit to image again...\n\n"
-sudo docker commit $APP_NAME $DOCKER_USERNAME/$APP_NAME:latest 
+$DOCKER commit $APP_NAME $IMAGE
 
 printf "\nstop container...\n\n"
-sudo docker stop $APP_NAME
+$DOCKER stop $APP_NAME
 
 printf "\nlogin docker...\n\n"
-sudo docker login --username=$DOCKER_USERNAME --password=$DOCKER_PASSWORD
+$DOCKER login --username=$REGISTRY_USER --password=$REGISTRY_PASS $REGISTRY_HOST
 
 printf "\npush image...\n\n"
-sudo docker push $DOCKER_USERNAME/$APP_NAME:latest
-
-# verify example
-# sudo docker run --name c1 -it --rm -p 9001:8080 kyle11235/node bash
-# sudo docker run --name c1 -d --rm -p 9001:8080 kyle11235/node
-# http://ip:9001
-# sudo docker stop c1
+$DOCKER push $IMAGE
 
 
 

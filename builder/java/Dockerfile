@@ -1,4 +1,4 @@
-FROM openjdk
+FROM openjdk:8
 EXPOSE 8080
 COPY tmp .
-CMD java -jar employee.jar
+CMD java -jar app.jar
