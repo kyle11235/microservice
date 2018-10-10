@@ -1,11 +1,14 @@
-name=navdrawer
-port=9002
-WORKSPACE=${WORKSPACE:=$PWD} 
+NAME=ui
+PORT=8888
+INTERNAL_PORT=80
 
-if [ "$(sudo docker ps -aq -f name=$name)" ]; then
+SHELL_DIR=$(dirname "$BASH_SOURCE")
+APP_DIR=$(cd $SHELL_DIR; pwd)
+
+if [ "$(docker ps -aq -f name=$NAME)" ]; then
 	# stop and run
-	sudo docker stop $name && sudo docker rm $name && sudo docker run --name $name -d -p $port:80 -v $WORKSPACE/web:/usr/share/nginx/html nginx
+	docker stop $NAME && docker rm $NAME && docker run --name $NAME -d -p $PORT:$INTERNAL_PORT -v $APP_DIR:/usr/share/nginx/html nginx
 else
 	# run
-	sudo docker run --name $name -d -p $port:80 -v $WORKSPACE/web:/usr/share/nginx/html nginx
+	docker run --name $NAME -d -p $PORT:$INTERNAL_PORT -v $APP_DIR:/usr/share/nginx/html nginx
 fi

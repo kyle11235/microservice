@@ -1,11 +1,14 @@
-name=cloudservice-1.0.0
-port=9102
-WORKSPACE=${WORKSPACE:=$PWD} 
+NAME=javaApp
+PORT=8080
+INTERNAL_PORT=8080
 
-if [ "$(sudo docker ps -aq -f name=$name)" ]; then
+SHELL_DIR=$(dirname "$BASH_SOURCE")
+APP_DIR=$(cd $SHELL_DIR; pwd)
+
+if [ "$(docker ps -aq -f name=$NAME)" ]; then
 	# stop and run
-	sudo docker stop $name && sudo docker rm $name && sudo docker run --name $name -d -p $port:8080 -v $WORKSPACE/target:/opt openjdk /bin/sh -c "java -jar /opt/$name.jar"
+	docker stop $NAME && docker rm $NAME && docker run --name $NAME -d -p $PORT:$INTERNAL_PORT -v $APP_DIR:/opt openjdk /bin/sh -c "java -jar /opt/app.jar"
 else
 	# run
-	sudo docker run --name $name -d -p $port:8080 -v $WORKSPACE/target:/opt openjdk /bin/sh -c "java -jar /opt/$name.jar"
+	docker run --name $NAME -d -p $PORT:$INTERNAL_PORT -v $APP_DIR:/opt openjdk /bin/sh -c "java -jar /opt/app.jar"
 fi
