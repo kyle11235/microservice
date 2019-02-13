@@ -1,4 +1,4 @@
-NAME=javaApp
+NAME=java
 PORT=8080
 INTERNAL_PORT=8080
 

@@ -2,12 +2,12 @@
 
 deploy
 
-    place startup.sh into source code
+    place start.sh into source code
     install git/docker
     git clone xxx
     cd xxx && build app
     chmod +x *.sh
-    ./startup.sh
+    ./start.sh
 
 redeploy
 

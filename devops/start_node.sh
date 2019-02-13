@@ -1,4 +1,4 @@
-NAME=proxy
+NAME=node
 PORT=8080
 INTERNAL_PORT=8080
 
