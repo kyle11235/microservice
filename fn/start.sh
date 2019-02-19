@@ -1,3 +1,5 @@
+fn start > out.log 2>&1 &
+
 cd /u02/app
 rm -rf gofn
 
