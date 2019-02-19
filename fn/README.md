@@ -17,12 +17,10 @@
 
 - run
 
-        fn start
-        open a new terminal
         sudo -i
-        mkdir -p /u02/app
-        ./run.sh
+        ./start.sh
         curl http://ip:8080/t/goapp/gofn-trigger
+        ./stop.sh
 
 ## lb
 
