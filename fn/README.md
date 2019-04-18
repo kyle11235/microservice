@@ -1,33 +1,42 @@
 # fn
 
-## fn
-
-- http://fnproject.io/
-- faq - https://github.com/fnproject/docs/blob/master/fn/general/faq.md
+http://fnproject.io/
 
 ## hello world
 
 - https://github.com/CloudTestDrive/EventLabs/blob/master/AppDev/functions/function2_lab.md
-- install docker into /usr/bin
-- install fn into /usr/local/bin
-
-        sudo -i
-        cd /usr/bin
-        ln -s /usr/local/bin/fn fn
-
+- install docker
+- install fn cli
 - run
 
-        sudo -i
         ./start.sh
-        curl http://ip:8080/t/goapp/gofn-trigger
+        curl http://localhost:8080/t/goapp/gofn
         ./stop.sh
 
-## lb
 
-- https://github.com/fnproject/lb
-- check ppt for architecture
+## compile fn cli
 
+- https://github.com/fnproject/cli/blob/master/CONTRIBUTING.md
+- install go
 
-## contribution
+        export GOPATH=/Users/kyle/go
+        export PATH=$GOPATH/bin:$PATH
+        source /etc/profile
 
-- https://github.com/fnproject/fn/blob/master/CONTRIBUTING.md
+- install dep
+
+        sudo -i
+        brew install dep
+
+- install fn cli
+
+        git clone https://github.com/fnproject/cli.git $GOPATH/src/github.com/fnproject/cli
+        cd $GOPATH/src/github.com/fnproject/cli
+        make dep
+        make install
+
+- test
+
+        fn --version // fn version 0.5.74
+        fn start -d (pull fn server image)
+        ...
