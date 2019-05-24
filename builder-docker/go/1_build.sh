@@ -1,1 +1,1 @@
-docker build -t kyle11235/docker-build-node .
+docker build -t kyle11235/docker-build-go .
