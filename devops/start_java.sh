@@ -1,3 +1,4 @@
+# docker / sudo docker
 # requires target/app.jar
 
 NAME=java
