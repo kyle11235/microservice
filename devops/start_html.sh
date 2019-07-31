@@ -1,5 +1,7 @@
+# docker / sudo docker
+
 NAME=html
-PORT=8888
+PORT=8080
 INTERNAL_PORT=80
 
 SHELL_DIR=$(dirname "$BASH_SOURCE")
