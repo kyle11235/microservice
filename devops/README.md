@@ -1,15 +1,14 @@
 # devops
 
-deploy
+        sudo yum install -y docker-engine
+        sudo systemctl enable docker
+        sudo systemctl start docker
+        sudo yum install -y git
+        sudo yum install -y maven (install missing lib)
+        git clone xxx && cd xxx (cat id_rsa > ~/.ssh/id_rsa for ssh clone)
+        chmod +x *.sh && ./deploy.sh
+        git checkout -- *.sh / git reset --hard
+        git pull
+        
 
-    place start.sh into source code
-    install git/docker
-    git clone xxx
-    cd xxx && build app
-    chmod +x *.sh
-    ./start.sh
-
-redeploy
-
-    git checkout -- *.sh
-    git pull
+    
