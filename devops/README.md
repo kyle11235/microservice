@@ -6,9 +6,11 @@
         sudo yum install -y git
         sudo yum install -y maven (install missing lib)
         git clone xxx && cd xxx (cat id_rsa > ~/.ssh/id_rsa for ssh clone)
-        chmod +x *.sh && ./deploy.sh
-        git checkout -- *.sh / git reset --hard
-        git pull
+
+        ./backup.sh
+        ./update.sh
+        ./deploy.sh
+
         
 
     
