@@ -1,14 +1,13 @@
 # devops
 
-        sudo yum install -y docker-engine
-        sudo systemctl enable docker
-        sudo systemctl start docker
-        sudo yum install -y git
-        sudo yum install -y maven (install missing lib)
+        sudo -i
+        yum install -y docker-engine
+        systemctl enable docker
+        systemctl start docker
+        yum install -y git
+        git config --global user.email "my email" (for commit)
+        git config --global user.name "kyle11235"
+        yum install -y maven (install missing lib)
         git clone xxx && cd xxx (cat id_rsa > ~/.ssh/id_rsa for ssh clone)
-        bash -s < backup.sh / bash -s < reset.sh
-        bash -s < deploy.sh
-
-        
-
-    
+        ./pull_push.sh or ./reset.sh
+        ./deploy.sh
