@@ -4,7 +4,7 @@ APP_DIR=$(cd $SHELL_DIR; pwd)
 cd $APP_DIR
 
 # comment
-COMMENT="backup"
+COMMENT="pull_push"
 if [ ! -z "$1" ]
   then
     COMMENT=$1
