@@ -31,6 +31,7 @@
         use mydb1;
 
 - create user
+
         change % to host name for production deployment
         drop user if exists 'user1'@'%';
         create user 'user1'@'%' identified by 'mypassword';
