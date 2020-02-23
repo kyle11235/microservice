@@ -24,3 +24,18 @@
 
         https://hub.docker.com/_/mysql
     
+- create schema
+
+        drop database if exists mydb1;
+        create database mydb1 default character set utf8mb4 collate utf8mb4_unicode_ci;
+        use mydb1;
+
+- create user
+        change % to host name for production deployment
+        drop user if exists 'user1'@'%';
+        create user 'user1'@'%' identified by 'mypassword';
+        grant all privileges on mydb1.* to 'user1'@'%';
+        flush privileges;
+        - check all users
+        select user, host FROM mysql.user;
+
