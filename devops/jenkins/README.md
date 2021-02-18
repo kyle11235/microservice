@@ -2,9 +2,31 @@
 
 - install
 
+        - guide
+        https://jenkins.io/doc/book/installing/
+
+        - download
+        https://get.jenkins.io/war/2.275/jenkins.war
+        /u02/app/jenkins/jenkins.war
+
+        - run
+        run.sh (echo "java -jar jenkins.war --httpPort=9001" > run.sh && chmod +x run.sh)
+        or
         nohup java -jar jenkins.war --httpPort=9001 > out.log &
 
-        f51d2722e56f42b9b6215a104e1ab8aa -> This may also be found at: /home/bitnami/.jenkins/secrets/initialAdminPassword
+        60630c48314c438bbd292ba9b1a56407 -> This may also be found at: /Users/kyle/.jenkins/secrets/initialAdminPassword
+        jenkins home = /Users/kyle/.jenkins
 
-        http://xxx:9001/
+        - visit
+        http://localhost:9001/
+        admin/xxx
 
+                - fix
+                error = Please wait while Jenkins is getting ready to work ...
+                vi /Users/kyle/.jenkins/hudson.model.UpdateCenter.xml
+                https://updates.jenkins.io/update-center.json -> https://mirrors.tuna.tsinghua.edu.cn/jenkins/updates/update-center.json
+                restart
+
+- jenkins pipeline
+
+        https://www.jenkins.io/doc/book/pipeline/
