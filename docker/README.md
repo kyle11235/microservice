@@ -199,7 +199,7 @@
 
         - save/load image offline
         sudo docker save -o ubuntu_image.docker ubuntu
-        sudo docker load ubuntu_image.docker
+        sudo docker load < ubuntu_image.docker
 
         - login
         docker login --username=kyle11235
@@ -355,5 +355,13 @@
         Z: means private to this container
         docker run --name adwapp -d -p 8080:8080 -v /home/opc/config:/root/.adw:z kyle11235/adwapp
 
+- registry
 
+        - ali mirror, centos
+        https://cr.console.aliyun.com/cn-hangzhou/instances/mirrors
+        
+        vi /etc/docker/daemon.json
+        "registry-mirrors": ["https://xxx.mirror.aliyuncs.com"]
+        systemctl daemon-reload
+        systemctl restart docker
 

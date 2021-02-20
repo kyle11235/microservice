@@ -1,43 +1,66 @@
 # gitlab
 
+- guide
+
+        https://docs.gitlab.com/
+
 - create registry
 
         ali -> container rgistry
         docker login --username=kyle11235 registry.cn-shenzhen.aliyuncs.com
-        password=mydocker001
+        password=xxx
 
         - configure dockerhub mirror
         ali -> container rgistry -> mirror center -> mirror accelerate -> copy url -> local daemon.json
         "registry-mirrors": ["https://xxx.mirror.aliyuncs.com"],
 
-- install gitlab-ce
+- install gitlab-ee
 
-        docker run --detach --hostname mygitlab.com --publish 443:443 --publish 80:80 --publish 22:22 --name gitlab --volume /u02/app/gitlab/config:/etc/gitlab --volume /u02/app/gitlab/logs:/var/log/gitlab --volume /u02/app/gitlab/data:/var/opt/gitlab gitlab/gitlab-ce:latest
+        on centos
+        by docker (macos not supported officially and mac M1 by docker failed)
+
+        - guide
+        https://docs.gitlab.com/omnibus/docker/
+
+        - install
+        use ali mirror for faster pull, 8022 for 22
+
+        export GITLAB_HOME=/srv/gitlab
+        docker run --detach --hostname gitlab.example.com --publish 443:443 --publish 80:80 --publish 8022:22 --name gitlab --restart always --volume $GITLAB_HOME/config:/etc/gitlab:Z --volume $GITLAB_HOME/logs:/var/log/gitlab:Z --volume $GITLAB_HOME/data:/var/opt/gitlab:Z gitlab/gitlab-ee:latest
+
+        docker logs -f gitlab
 
         visit http://localhost/
-        root/mygitlab001
+        root/xxx
 
-        - error
-        502 error
+        - update external url
+        https://docs.gitlab.com/omnibus/settings/configuration.html#configuring-the-external-url-for-gitlab
         
-        cpu is high
-        CONTAINER ID   NAME      CPU %     MEM USAGE / LIMIT     MEM %     NET I/O           BLOCK I/O         PIDS
-        61600954239f   gitlab    200%    1.678GiB / 1.944GiB   86.30%    29.1kB / 64.2kB   50.8GB / 2.86MB   266
+        vi /$GITLAB_HOME/config/gitlab.rb
+        external_url "http://8.140.116.183/"
+        docker restart gitlab
 
 - install gitlab-runner
 
+        on centos
+        by binary (mac M1 failed with arm64 binary)
+
+        - guide
+        https://docs.gitlab.com/runner/install/linux-manually.html
+
         - install
-        docker run -d --name gitlab-runner --restart always --link gitlab -v /u02/app/gitlab-runner/config:/etc/gitlab-runner -v /var/run/docker.sock:/var/run/docker.sock gitlab/gitlab-runner:latest
+        curl -L --output /usr/local/bin/gitlab-runner https://gitlab-runner-downloads.s3.amazonaws.com/latest/binaries/gitlab-runner-linux-amd64
+        chmod +x /usr/local/bin/gitlab-runner
+        useradd --comment 'GitLab Runner' --create-home gitlab-runner --shell /bin/bash
+        gitlab-runner install --user=gitlab-runner --working-directory=/home/gitlab-runner
+        gitlab-runner start
 
         - register
-        docker exec -it gitlab-runner gitlab-runner register
-        
-        gitlab url=http://${container_name}
-        e.g.
-        http://gitlab
+        https://docs.gitlab.com/runner/register/index.html
 
-        token=get from http://localhost:81/admin/runners
-
+        gitlab-runner register
+        gitlab url=http://x.x.x.x/
+        token=get from http://x.x.x.x:port/admin/runners
         executor=docker
 
                 - shell executor

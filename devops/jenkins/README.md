@@ -27,6 +27,14 @@
                 https://updates.jenkins.io/update-center.json -> https://mirrors.tuna.tsinghua.edu.cn/jenkins/updates/update-center.json
                 restart
 
+- reset password
+
+        vi ~/.jenkins/users/admin.../config.xml -> 
+        jbcrypt:$2a$10$4NW.9hNVyltZlHzrNOOjlOgfGrGUkZEpBfhkaUrb7ODQKBVmKRcmK = 123456
+
 - jenkins pipeline
 
         https://www.jenkins.io/doc/book/pipeline/
+
+        - steps generator
+        http://localhost:9001/job/guide-jira-example/pipeline-syntax/
