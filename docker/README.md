@@ -178,8 +178,8 @@
         docker run -it --rm -p 8888:8080 tomcat:8.0
         docker run -it --rm -p 8888:8080 tomcat:alpine
 
-        /u02/app/test/test.war
-        docker run -d --name c4 -p 8888:8080 -v /u02/app/test:/usr/local/tomcat/webapps tomcat
+        /opt/test/test.war
+        docker run -d --name c4 -p 8888:8080 -v /opt/test:/usr/local/tomcat/webapps tomcat
         docker logs -f c4
         
 - image
@@ -310,7 +310,7 @@
 
             - bind mount (host directory)
             e.g.
-            sudo docker run --rm -it -v /u02/app/tmp:/usr/share/nginx/html nginx bash
+            sudo docker run --rm -it -v /opt/tmp:/usr/share/nginx/html nginx bash
             content of target point will be hidden untill host dir is unmounted
 
             - tmpfs mount (host memory)

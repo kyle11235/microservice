@@ -1,7 +1,7 @@
 # fn start -d
 fn start > out.log 2>&1 &
 
-cd /u02/app
+cd /opt
 rm -rf gofn
 
 fn use context default

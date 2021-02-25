@@ -7,7 +7,7 @@
 
         - download
         https://get.jenkins.io/war/2.275/jenkins.war
-        /u02/app/jenkins/jenkins.war
+        /opt/jenkins/jenkins.war
 
         - run
         run.sh (echo "java -jar jenkins.war --httpPort=9001" > run.sh && chmod +x run.sh)
